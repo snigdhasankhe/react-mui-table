@@ -2,7 +2,7 @@
 
 # How to start working
 
-1. Fork this repo and clone it locally. Click [here](https://github.com/developer-job-simulation/react-ecommerce/fork) to fork this repo.
+1. Fork this repo and clone it locally. Click [here](https://github.com/developer-job-simulation/paginate-mui-table/fork) to fork this repo.
 2. Fix the issue
 3. Create Pull Request to this repository
 
