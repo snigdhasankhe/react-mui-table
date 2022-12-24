@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
 import {useEffect, useState} from 'react';
 import {Box, Toolbar, Typography} from '@mui/material';
@@ -12,11 +13,25 @@ import {getCompanyData} from '../company-data-generator';
 
 function CompanyTable() {
   let [rows, setRows] = useState([]);
+  let [rowsPerPage, setRowsPerPage] = useState(10);
+  let [page, setPage] = useState(0);
 
   useEffect(() => {
     rows = getCompanyData();
+    // rows = rows.filter(r => r.id<page * rowsPerPage + rowsPerPage)
+    console.log(page)
     setRows(rows);
   }, []);
+
+  const handleChangePage = (event, newPage) => {
+    console.log("page flipped");
+    setPage(newPage)
+  }
+
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(event.target.value)
+    setPage(0);
+  }
 
   return (
     <Box mt={20} sx={{width: '100%'}}>
@@ -49,7 +64,10 @@ function CompanyTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map((row) => (
                 <TableRow
                   key={row.id}
                   sx={{'&:last-child td, &:last-child th': {border: 0}}}
@@ -57,6 +75,7 @@ function CompanyTable() {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
+                  {/* <TableCell align="right">{row.id}</TableCell> */}
                   <TableCell align="right">{row.description}</TableCell>
                   <TableCell align="right">{row.currency}</TableCell>
                   <TableCell align="right">{row.routingNumber}</TableCell>
@@ -65,6 +84,14 @@ function CompanyTable() {
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination 
+          rowsPerPageOptions={[10, 20 ,25, 50]}
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onRowsPerPageChange={handleRowsPerPageChange}
+          onPageChange={handleChangePage}
+           />
       </Paper>
     </Box>
   );
